@@ -26,4 +26,4 @@ mkdir -p etc
 cp "$sandbox_profile" etc/profile.sb
 
 install -D "$root/wrapper.sh" "bin/$target_name"
-sed -i "s:@TARGET@:$target:" "bin/$target_name"
+sed -i .bak "s:@TARGET@:$target:g" "bin/$target_name"
