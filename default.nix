@@ -1,16 +1,15 @@
-{ stdenv, fetchzip, closureInfo, runCommand, writeScript, meson, ninja }:
+{ stdenv, closureInfo, runCommand, writeScript, meson, ninja }:
 { name, target, icon ? null, withOpen ? false }:
 
 let
   closure = closureInfo { rootPaths = [ stage2 ]; };
 
-  nix-vendor = stdenv.mkDerivation rec {
-    name = "nix-vendor-${version}";
-    version = "86084e649d85f89f905664f67f2f197dca1f5c6a";
+  nix-vendor = stdenv.mkDerivation {
+    name = "nix-vendor";
 
-    src = fetchzip {
-      url = "https://github.com/serokell/nix-vendor/archive/${version}.tar.gz";
-      sha256 = "0g9vjddrcpzzr05pb5m162azwxf1k7k7scycv3zcznvd7k7r8b79";
+    src = fetchGit {
+      url = "https://github.com/serokell/nix-vendor";
+      rev = "a80cd5a378438e28d0760292c212b1410d408089";
     };
 
     nativeBuildInputs = [ meson ninja ];
