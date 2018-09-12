@@ -1,4 +1,4 @@
-{ stdenv, closureInfo, runCommand, writeScript, meson, ninja }:
+{ stdenv, closureInfo, writeScript, meson, ninja }:
 { name, target, icon ? null, withOpen ? false }:
 
 let
@@ -33,13 +33,21 @@ let
   '';
 in
 
-runCommand name {} ''
-  mkdir -p "$out/Applications/${name}.app" && cd $_
+stdenv.mkDerivation {
+  inherit name;
 
-  for path in $(< ${closure}/store-paths); do
-    cp --parents -r $path .
-  done
+  buildCommand = ''
+    mkdir -p "$out/Applications/${name}.app" && cd $_
 
-  ${stdenv.lib.optionalString (icon != null) "cp ${icon} AppIcon.icns"}
-  install ${stage1} "${name}"
-''
+    for path in $(< ${closure}/store-paths); do
+      cp --parents -r $path .
+    done
+
+    ${stdenv.lib.optionalString (icon != null) "cp ${icon} AppIcon.icns"}
+    install ${stage1} "${name}"
+  '';
+
+  meta = with stdenv.lib; {
+    platforms = platforms.darwin;
+  };
+}
