@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     install ${stage1} "MacOS/${name}"
 
     for path in $(< ${closure}/store-paths); do
-      cp --parents -r $path Resources
+      cp -a --parents $path Resources
     done
 
     cp ${icon} "Resources/${name}.icns"
